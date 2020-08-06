@@ -2,7 +2,7 @@ import numpy as np
 from functions import f_before, f_after, g_before, g_after
 
 
-def main(X):
+def compute_sum(X):
     """
     Given a list X of datapoints x_0 to x_n, applies functions f(.) and g(.) to each element.
     The functions come in two flavors, the flavor is chosen wrt a threshold: if x >= threshold, functions f_after and
@@ -41,4 +41,4 @@ def main(X):
 
 
 if __name__ == '__main__':
-    print(main([1, 2, 3]))
+    print(compute_sum([1, 2, 3]))
