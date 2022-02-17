@@ -24,18 +24,38 @@ def compute_sum(X):
     Returns:
       sum of products of all possible functions' products wrt to thresholds.
     """
-    # Construct list of possible function results
-    F_before = [f_before(x) for x in X]
-    F_after = [f_after(x) for x in X]
-    G_before= [g_before(x) for x in X]
-    G_after = [g_after(x) for x in X]
+    # Construct lists of partial sums on every x as threshold
+    F_before_cumsums = [0]
+    cur_sum = 0
+    for x in X[:-1]:
+        cur_sum += f_before(x)
+        F_before_cumsums.append(cur_sum)
+    i = len(X) - 1
+    cur_sum = 0
+    F_after_cumsums = [0] * len(X)
+    for i in range(len(X)-1, -1, -1):
+        cur_sum += f_after(X[i])
+        F_after_cumsums[i] = cur_sum
+
+    G_before_cumsums = [0]
+    cur_sum = 0
+    for x in X[:-1]:
+        cur_sum += g_before(x)
+        G_before_cumsums.append(cur_sum)
+    i = len(X) - 1
+    cur_sum = 0
+    G_after_cumsums = [0] * len(X)
+    for i in range(len(X)-1, -1, -1):
+        cur_sum += g_after(X[i])
+        G_after_cumsums[i] = cur_sum
 
     # Initialize empty vectors for function sums at thresholds (0 is at trshld == x_0, 1 at x_1 etc.)
-    F = []
-    G = []
+    # Sum at each threshold is the sum of left subarray (which is cumsum of f_before to each element)
+    # and sum of right subarray in this point
+    F, G = [], []
     for threshold in range(len(X)):
-        F.append(np.sum(F_before[:threshold] + F_after[threshold:]))
-        G.append(np.sum(G_before[:threshold] + G_after[threshold:]))
+        F.append(F_before_partsums[threshold] + F_after_partsums[i])
+        G.append(G_before_partsums[threshold] + G_after_partsums[i])
 
     return np.dot(F, G)
 
